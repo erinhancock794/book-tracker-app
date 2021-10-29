@@ -2,11 +2,11 @@
 const theList = document.querySelector('#theList');
 let formattedSearchResults = []
 
-fetch('http://openlibrary.org/search.json?q=the+lord+of+the+rings&limit=5')
+fetch('http://openlibrary.org/search.json?q=the+lord+of+the+rings&limit=6')
 .then(res => res.json())
 .then(data => {
     console.log('data--->', data);
-    data.docs.forEach(book => addToList(book.title))
+    // data.docs.forEach(book => addToList(book.title))
     data.docs.forEach(book => {
         compileBookData(book);
         // addDataToCard(formattedSearchResults)
@@ -49,7 +49,9 @@ function addToList(title) {
 }
 
 function addDataToCard(book) {
-    const rows = document.querySelector('.row');
+    const rows = document.querySelector('#card-row');
+    const cardDiv = document.querySelector('.card-div');
+
     const bookCard = document.querySelector('.search-card');
     // const bookCardBody = document.querySelector('.card-body');
     // const bookCardTitle = document.querySelector('.card-title');
@@ -60,8 +62,7 @@ function addDataToCard(book) {
     console.log('bookj title', book.title);
 
     let cardTemplate = `
-    <div class="card search-card" style="width: 18rem;">
-    <img class="card-img-top" src="..." alt="Card image cap">
+    <div class="card search-card m-3" style="width: 18rem;">
     <div class="card-body">
       <h5 class="card-title">${book.title}</h5>
       <p class="card-text">Written by ${book.author}. First published in ${book.publishYear}</p>
@@ -76,8 +77,8 @@ function addDataToCard(book) {
 <span class="far fa-star" onclick="clicked()"></span>
 </div>
 </form>
+</div>
 
-    </div>
   </div>`
 
   rows.insertAdjacentHTML("beforeend", cardTemplate);
