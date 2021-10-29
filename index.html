@@ -13,7 +13,7 @@
 </head>
 
 <body>
-  <nav class="navbar navbar-expand-sm navbar-light bg-light">
+  <nav class="navbar fixed-top navbar-expand-sm navbar-light bg-light">
     <div class="container-fluid">
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
@@ -21,10 +21,10 @@
             <a class="nav-link active" aria-current="page" href="#">Home</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#">Read</a>
+            <a class="nav-link" href="#card-row-has-read">Read</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#">Want To Read</a>
+            <a class="nav-link" href="#card-row-want-to-read">Want To Read</a>
           </li>
         </ul>
       </div>
@@ -37,25 +37,21 @@
 
         <div class="col-md-12">
           <div>
-            <h2>Search</h2>
+            <h2>Start Your Book List</h2>
           </div>
           <div class="form">
              <i class="fa fa-search"></i>
               <input type="text" class="form-control form-input"
-              placeholder="Search anything..."> <span class="left-pan"></span>
+              placeholder="Search for a book..."> <span class="left-pan"></span>
              </div>
         </div>
       </div>
     </div>
   </header>
 
-  <!-- <ul id="theList" class="list-group">
-  </ul> -->
 
   <div class="container" id="card-container-search">
     <div class="row " id="card-row-search"> 
-        <!-- <div class="card search-card" style="width: 18rem;">
-        </div> -->
       
     </div>
   </div>
@@ -63,8 +59,6 @@
   <div class="container" id="card-container-has-read">
     <h3>Read</h3>
     <div class="row " id="card-row-has-read"> 
-        <!-- <div class="card search-card" style="width: 18rem;">
-        </div> -->
       
     </div>
   </div>
@@ -72,25 +66,9 @@
   <div class="container" id="card-container-want-to-read">
     <h3>Want To Read</h3>
     <div class="row " id="card-row-want-to-read"> 
-        <!-- <div class="card search-card" style="width: 18rem;">
-        </div> -->
       
     </div>
   </div>
-
-<!-- 
-
-  <div class="container">
-    <div class="row">
-
-    <div class="col-sm-4">
-
-      <div class="card search-card">
-</div>
-      </div>
-      
-    </div>
-  </div> -->
 
 </body>
 <script src="js/main.js"></script>

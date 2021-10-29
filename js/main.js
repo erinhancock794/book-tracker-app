@@ -18,7 +18,7 @@
         data.docs.forEach((book) => {
           compileBookData(book);
         });
-        formattedSearchResults.forEach((book) => addDataToCard(book, 'search'));
+        formattedSearchResults.forEach((book) => addDataToCard(book));
       });
   }
 
@@ -52,8 +52,7 @@
 //     theList.appendChild(theLi);
 //   }
 
-  function addDataToCard(book, list) {
-      console.log('list---', list);
+  function addDataToCard(book) {
     //   let idName = 'row'
     //   if (list === 'has-read') {
     //       idName = 'has-read'
@@ -61,7 +60,7 @@
     //   if (list === 'want-to-read') {
     //       idName = 'want-to-read'
     //   }
-    const cardRow = document.querySelector(`#card-row-${list}`);
+    const cardRow = document.querySelector(`#card-row-search`);
     const hasRead = book.userData.hasRead;
     let btnClass = 'primary';
     let hasReadButtonText = 'Mark as Read';
@@ -81,14 +80,6 @@
 
       <button class="btn btn-${btnClass}" type="submit" id="mark-as-read">${hasReadButtonText}</button>
       <button class="btn btn-primary" type="submit" id="want-to-read">Want to Read</button>
-
-<form>
-<div class="star-rating">
-<span class="fas fa-star checked"></span>
-<span class="far fa-star" onclick="clicked()"></span>
-<span class="far fa-star" onclick="clicked()"></span>
-</div>
-</form>
 </div>
 
   </div>`;
@@ -99,11 +90,18 @@
   let cardContainer = document.querySelector('#card-container-search');
   cardContainer.addEventListener('click', (event) => {
     console.log('cardContainer clicked');
+    handleClickEvent(event)
+});
+
+let wantToReadContainer = document.querySelector('#card-container-want-to-read');
+wantToReadContainer.addEventListener('click', (event) => {
+    handleClickEvent(event);
+})
+
+function handleClickEvent(event) {
     event.preventDefault();
     console.log('event targer--->', event.target.parentElement);
     const bookId = event.target.parentElement.getAttribute('id');
-    
-    // getAttribute('id');
     console.log('bookId--', bookId);
     const { type, id } = event.target;
     console.log('type--->', type);
@@ -116,8 +114,8 @@
         setWantToRead(bookId, event.target)
 
     }
-  
-})
+}
+
 function setMarkAsRead(bookId, target) {
     let bookItem = formattedSearchResults.find((i) => i.id == bookId)
     bookItem.userData.hasRead = true;
@@ -190,13 +188,6 @@ function addDataToWantToReadCard(book) {
       <h5 class="card-title">${book.title}</h5>
       <p class="card-text">Written by ${book.author}. First published in ${book.publishYear}</p>
       <button class="btn btn-${btnClass}" type="submit" id="mark-as-read">${hasReadButtonText}</button>
-<form>
-<div class="star-rating">
-<span class="fas fa-star checked"></span>
-<span class="far fa-star" onclick="clicked()"></span>
-<span class="far fa-star" onclick="clicked()"></span>
-</div>
-</form>
 </div>
 
   </div>`;
