@@ -12,7 +12,7 @@
   function fetchAPIData(searchInput) {
     let searchInputValue = searchInput.value;
     console.log("searchInputValue---->", searchInputValue);
-    fetch(`http://openlibrary.org/search.json?q=${searchInputValue}&limit=5`)
+    fetch(`https://openlibrary.org/search.json?q=${searchInputValue}&limit=5`)
       .then((res) => res.json())
       .then((data) => {
         data.docs.forEach((book) => {
@@ -41,32 +41,13 @@
     formattedSearchResults.push(bookInfo);
   }
 
-//   function addToList(title) {
-//     let theLi = document.createElement("li");
-//     let theATag = document.createElement("a");
-//     theATag.setAttribute("href", "#");
-
-//     let theText = document.createTextNode(title);
-//     theATag.appendChild(theText);
-//     theLi.appendChild(theATag);
-//     theList.appendChild(theLi);
-//   }
 
   function addDataToCard(book) {
-    //   let idName = 'row'
-    //   if (list === 'has-read') {
-    //       idName = 'has-read'
-    //   }
-    //   if (list === 'want-to-read') {
-    //       idName = 'want-to-read'
-    //   }
     const cardRow = document.querySelector(`#card-row-search`);
     const hasRead = book.userData.hasRead;
     let btnClass = 'primary';
-    let hasReadButtonText = 'Mark as Read';
     if (hasRead) {
         btnClass = 'secondary'
-        // hasReadButtonText = 'Mark as Unread'
     }
 
 
@@ -78,7 +59,7 @@
       <h5 class="card-title">${book.title}</h5>
       <p class="card-text">Written by ${book.author}. First published in ${book.publishYear}</p>
 
-      <button class="btn btn-${btnClass}" type="submit" id="mark-as-read">${hasReadButtonText}</button>
+      <button class="btn btn-${btnClass}" type="submit" id="mark-as-read">Mark as Read</button>
       <button class="btn btn-primary" type="submit" id="want-to-read">Want to Read</button>
 </div>
 
