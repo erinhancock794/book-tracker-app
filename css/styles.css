@@ -53,6 +53,12 @@ body {
       width: 40%;
   }
   
-  .star-rating {
-      color: orange;
+  .rating {
+      color: rgb(85, 121, 241);
+      display: flex;
+      justify-content: flex-end;
   }
+  .far, .fas {
+      padding: 3px;
+  }
+
