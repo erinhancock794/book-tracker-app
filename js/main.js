@@ -172,7 +172,7 @@
     // addDataToWantToReadCard(bookItem);
     const cardRow = document.querySelector("#card-row-want-to-read");
 
-    addDataToCard(bookItem, cardRow)
+    addDataToCard(bookItem, cardRow) //todo: THIS IS WHERE YOU LEFT OFF, REFACTOR ALL THE TEMPLATE FUNCTIONS
     console.log("bookItem--", bookItem);
   }
 
