@@ -1,18 +1,31 @@
 (function (window) {
+
   let bookData = [];
   const searchInput = document.querySelector(".form-input");
   searchInput.addEventListener("keydown", (e) => {
     if (e.code === "Enter") {
       fetchAPIData(searchInput);
       searchInput.value = "";
-
     }
-
   });
+
+  fetch('/get')
+  .then((res) => res.json())
+  .then(data => {
+    data.forEach((book) => {
+      console.log('book-----', book);
+      if (book.userData.hasRead) {
+        addDataToHasReadCard(book)
+      }
+      if (book.userData.wantToRead) {
+        addDataToWantToReadCard(book)
+      }
+     })
+  })
 
   function fetchAPIData(searchInput) {
     let searchInputValue = searchInput.value;
-    fetch(`https://openlibrary.org/search.json?q=${searchInputValue}&limit=5`)
+    fetch(`https://openlibrary.org/search.json?q=${searchInputValue}&limit=7`)
       .then((res) => res.json())
       .then((data) => {
         data.docs.forEach((book) => {
@@ -79,6 +92,7 @@
   function handleClickEvent(event) {
     event.preventDefault();
     const divId = event.target.parentElement.getAttribute("id");
+    console.log('divId====>', divId, typeof divId);
     const ratingId =
       event.target.parentElement.parentElement.parentElement.getAttribute("id");
     const { type, id } = event.target;
@@ -98,18 +112,27 @@
 
   function setMarkAsRead(divId, target) {
     let bookItem = findMatchingBook(divId)
+    console.log('bookItem----_>', typeof bookItem);
     bookItem.userData.hasRead = true;
     const previousLocation =
       target.parentElement.parentElement.parentElement.getAttribute("id");
     if (previousLocation === "card-row-want-to-read") {
       target.parentElement.parentElement.remove();
+      updateBookInDatabase(bookItem)
+    } else {
+      addBookToDatabase(bookItem)
     }
+    console.log('bookItem userData---->', bookItem.userData);
+
     addDataToHasReadCard(bookItem);
   }
+
+
 
   function setWantToRead(divId) {
     let bookItem = findMatchingBook(divId)
     bookItem.userData.wantToRead = true;
+    addBookToDatabase(bookItem)
     addDataToWantToReadCard(bookItem);
   }
 
@@ -171,6 +194,35 @@
   }
 
   function findMatchingBook(id) {
-    return bookData.find((i) => i.id == id);
+    id.toString()
+    console.log('findMatchingBook id', id, typeof id);
+
+    const match = bookData.find((i) => i.id == id);
+    console.log('match----', match);
+    return match
+  }
+
+  function addBookToDatabase(bookItem) {
+    fetch('/add', {
+      method: "POST",
+      body: JSON.stringify(bookItem)
+    }).then((res) => res.json())
+    .then((data) => {
+      console.log('data---->', data);
+    });
+  }
+
+  function updateBookInDatabase(bookItem) {
+    fetch(`/${bookItem.id}`), {
+      method: 'PUT',
+      body: JSON.stringify(bookItem),
+      headers: getHeaders()
+    }
+  }
+
+  function getHeaders() {
+    return {
+      "Content-Type": "application/json; charset=UTF-8",
+    };
   }
 })(window);
