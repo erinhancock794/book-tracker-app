@@ -20,10 +20,12 @@ const Book = new Schema({
         type: Number
     },
     isbn: {
-        type: String
+        type: String || Array,
+        default: ''
     },
     lccn: {
-        type: String
+        type: String || Array,
+        default: ''
     },
     userData: {
         rating: {

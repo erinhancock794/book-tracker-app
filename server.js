@@ -32,15 +32,53 @@ app.use(express.static("public"));
 const Book = require('./models/Book');
 const getAllBooks = async () => {
     const allBooks = await Book.find();
-    console.log('allBooks----_>', allBooks);
+    // console.log('allBooks----_>', allBooks);
     return allBooks;
 }
 
 app.get("/get", async (req, res) => {
     await getAllBooks().then((result) => {
-        console.log('result---->', result);
+        // console.log('result---->', result);
         res.status(200).json(result);
       });
+  });
+
+
+app.get("/match/:bookId", async (req, res) => {
+    await Book.findOne( {id: req.params.bookId}).then(async(match) => {
+        if (match) {
+            res.status(200).json(match)
+        }
+    })
+    // const match = await Book.find({id: req.params.bookId})
+    // .then(result => res.status(200).json(result))
+    //     console.log('match in get call----->', match)
+
+    // return match;
+    // .then((result) => {
+    //     console.log(' PUT result--->', result)
+    //     res.status(200).json(result)
+    // })
+    // return match;
+
+  });
+
+  app.put("/:bookId", async (req, res) => {
+    console.log('req params', req.params)
+    const id = req.params.bookId
+    console.log('id---', id)
+    console.log('req body', req.body)
+    const matchingBook = await Book.findOneAndUpdate({id: id}, req.body)
+    .then((result) => {
+        console.log('result in PUT---', result)
+        if (req.body.userData.hasRead) {
+            _.set(result, 'userData.hasRead', true)
+        }
+    })
+    console.log('matchingBook', matchingBook)
+    res.status(200).json(matchingBook)
+
+
   });
 
 app.post('/add', async (req, res) => {
@@ -64,8 +102,8 @@ app.post('/add', async (req, res) => {
               title: bookItem.title,
               author: bookItem.author[0] || "unknown",
               publishYear: bookItem.first_publish_year || "",
-              isbn: bookItem.isbn[0],
-              lccn: bookItem.lccn[0],
+            //   isbn: bookItem.isbn[0],
+            //   lccn: bookItem.lccn || bookItem.lccn[0] || "",
               userData: {
                 rating: 0,
                 wantToRead: bookItem.userData.wantToRead,

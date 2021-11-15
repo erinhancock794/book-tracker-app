@@ -1,6 +1,7 @@
 (function (window) {
 
   let bookData = [];
+  let databaseData = [];
   const searchInput = document.querySelector(".form-input");
   searchInput.addEventListener("keydown", (e) => {
     if (e.code === "Enter") {
@@ -14,12 +15,14 @@
   .then(data => {
     data.forEach((book) => {
       console.log('book-----', book);
+      // bookData.push(book)
       if (book.userData.hasRead) {
         addDataToHasReadCard(book)
       }
       if (book.userData.wantToRead) {
         addDataToWantToReadCard(book)
       }
+      databaseData.push(book)
      })
   })
 
@@ -45,10 +48,10 @@
       id: book.edition_key[0],
       key: book.key,
       title: book.title,
-      author: author || "unknown",
+      author: author[0] || "unknown",
       publishYear: book.first_publish_year || "",
-      isbn: book.isbn,
-      lccn: book.lccn,
+      // isbn: book.isbn,
+      // lccn: book.lccn,
       userData: {
         rating: 0,
         wantToRead: false,
@@ -110,14 +113,15 @@
     }
   }
 
-  function setMarkAsRead(divId, target) {
-    let bookItem = findMatchingBook(divId)
-    console.log('bookItem----_>', typeof bookItem);
+  async function setMarkAsRead(divId, target) {
+    let bookItem = await findMatchingBook(divId)
+    console.log('bookItem----_>', bookItem);
     bookItem.userData.hasRead = true;
     const previousLocation =
       target.parentElement.parentElement.parentElement.getAttribute("id");
     if (previousLocation === "card-row-want-to-read") {
       target.parentElement.parentElement.remove();
+      bookItem.userData.wantToRead = false;
       updateBookInDatabase(bookItem)
     } else {
       addBookToDatabase(bookItem)
@@ -129,14 +133,15 @@
 
 
 
-  function setWantToRead(divId) {
-    let bookItem = findMatchingBook(divId)
+  async function setWantToRead(divId) {
+    let bookItem = await findMatchingBook(divId)
     bookItem.userData.wantToRead = true;
     addBookToDatabase(bookItem)
     addDataToWantToReadCard(bookItem);
   }
 
   function addDataToHasReadCard(book) {
+    // bookData.push(book)
     const cardRow = document.querySelector("#card-row-has-read");
     const hasRead = book.userData.hasRead;
     let btnClass = "primary";
@@ -181,6 +186,8 @@
   }
 
   function addDataToWantToReadCard(book) {
+    // bookData.push(book)
+
     const cardRow = document.querySelector("#card-row-want-to-read");
     let cardTemplate = `
     <div class="card search-card m-3"  style="width: 18rem;">
@@ -193,12 +200,28 @@
     cardRow.insertAdjacentHTML("beforeend", cardTemplate);
   }
 
-  function findMatchingBook(id) {
-    id.toString()
-    console.log('findMatchingBook id', id, typeof id);
+  function findMatchingBook(bookId) {
+    console.log('findMatchingBook------------')
+    bookId.toString()
+    console.log('findMatchingBook id', bookId, typeof bookId);
 
-    const match = bookData.find((i) => i.id == id);
-    console.log('match----', match);
+
+    // const fetchData = fetch(`/match/${bookId}`)
+    // .then((res) => res.json())
+    // .then(data => {
+    //   console.log('data---->', data)
+
+    //   // return data.forEach(i => i)
+    //   return data;
+
+    // })
+    // return fetchData ? fetchData : bookData.find((i) => i.id == id)
+    //     console.log('match----', match);
+
+    // return match
+
+
+    const match = bookData.find((i) => i.id == bookId) || databaseData.find((i) => i.id == bookId);
     return match
   }
 
@@ -209,15 +232,23 @@
     }).then((res) => res.json())
     .then((data) => {
       console.log('data---->', data);
+          addDataToHasReadCard(data.newBook);
+
     });
   }
 
   function updateBookInDatabase(bookItem) {
-    fetch(`/${bookItem.id}`), {
+    console.log('book Item passed into updateBookInDatabase', bookItem)
+    fetch(`/${bookItem.id}`, {
       method: 'PUT',
       body: JSON.stringify(bookItem),
       headers: getHeaders()
-    }
+    })
+    .then(res => res.json())
+    .then((data) => {
+      console.log('data from updateBookInDatabase---->', data)
+      
+    })
   }
 
   function getHeaders() {
