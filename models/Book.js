@@ -28,8 +28,8 @@ const Book = new Schema({
         default: ''
     },
     userData: {
-        rating: {
-            type: Number
+        liked: {
+            type: Boolean
         },
         wantToRead: {
             type: Boolean,
